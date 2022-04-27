@@ -1,13 +1,19 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Register() {
   const [dataRegister, setDataRegister] = useState({
-    email: "",
-    password: "",
+    email: "eve.holt@reqres.in",
+    password: "pistol",
   });
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/");
+    }
+  });
 
   const handleSubmit = async () => {
     try {
@@ -29,6 +35,7 @@ function Register() {
       <input
         type="email"
         placeholder="email"
+        value={dataRegister.email}
         onChange={(e) =>
           setDataRegister({
             ...dataRegister,
@@ -39,6 +46,7 @@ function Register() {
       <input
         type="password"
         placeholder="password"
+        value={dataRegister.password}
         onChange={(e) =>
           setDataRegister({
             ...dataRegister,

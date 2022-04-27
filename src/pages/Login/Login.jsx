@@ -1,13 +1,19 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [dataLogin, setDataLogin] = useState({
-    email: "",
-    password: "",
+    email: "eve.holt@reqres.in",
+    password: "cityslicka",
   });
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/");
+    }
+  });
 
   const handleSubmit = async () => {
     try {
@@ -17,14 +23,11 @@ function Login() {
         data: dataLogin,
       });
       console.log(res.data);
-      localStorage.setItem("token", res.data.token);
 
-      navigate("/");
-      // const token = localStorage.getItem('token');
-
-      // if (token) {
-
-      // }
+      if (res.status === 200) {
+        localStorage.setItem("token", res.data.token);
+        navigate("/", { replace: true });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -35,6 +38,7 @@ function Login() {
       <input
         type="email"
         placeholder="email"
+        value={dataLogin.email}
         onChange={(e) =>
           setDataLogin({
             ...dataLogin,
@@ -45,6 +49,7 @@ function Login() {
       <input
         type="password"
         placeholder="password"
+        value={dataLogin.password}
         onChange={(e) =>
           setDataLogin({
             ...dataLogin,
